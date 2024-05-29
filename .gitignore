@@ -1,0 +1,8 @@
+CMake_Cheatsheet.aux
+CMake_Cheatsheet.fls
+CMake_Cheatsheet.out
+CMake_Cheatsheet.synctex.gz
+CMake_Cheatsheet.fdb_latexmk
+CMake_Cheatsheet.log
+**/build/
+.vscode/

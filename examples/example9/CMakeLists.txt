@@ -1,7 +1,6 @@
 # CMakeLists.txt
 cmake_minimum_required (VERSION 2.9)
 
-# Setup projectname
 project (HelloProject)
 
 set(fooinclude "/usr/local/include"

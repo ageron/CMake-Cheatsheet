@@ -90,7 +90,7 @@ pdfkeywords={Cross-platform development, Open Source, CMake}
 %	HEADING ONE
 %----------------------------------------------------------------------------------------
 
-This cheatsheet will give you an idea how CMake works and how it can be used to configure software projects.
+This cheatsheet will give you an idea of how CMake works and how it can be used to configure software projects.
 
 The document and the CMake examples are available at  \url{https://github.com/mortennobel/CMake-Cheatsheet}. 
 
@@ -113,9 +113,9 @@ src/foo.hpp
 
 \vspace{\baselineskip} % Whitespace before the next section
 
-This project contains two source files located in the src directory and one header file in the include directory in the same directory.
+This project contains two source files located in the \codeword{src} directory and one header file in the same directory.
 
-When running CMake on this project you are asked to for a binary directory. It is best practice to create a new directory since this directory will contain all files related to building the project. If something goes wrong, you can delete the folder and start over.
+When running CMake on this project you are asked for a build directory. It is best practice to create a new directory since this directory will contain all files related to building the project. If something goes wrong, you can delete the folder and start over.
 
 Running CMake will not create the final executable, but instead, it will generate project files for Visual Studio, XCode or makefiles. Use these tools to build the project.
 
@@ -127,13 +127,13 @@ For example 1 the file looks like this:
 
 \lstinputlisting[language=bash]{examples/example1/CMakeLists.txt}
 
-First, the minimum version of CMake is defined. Then the project name is defined using the command \codeword{project()}. A project can contain multiple targets (either executables or libraries). This project defines a single executable target called \codeword{Hello}, which is created by compiling and linking the two source files \codeword{main.cpp} and \codeword{foo.cpp} files.
+First, the minimum version of CMake is defined. Then the project name is defined using the command \codeword{project()}. A project can contain multiple targets (either executables or libraries). This project defines a single executable target called \codeword{Hello}, which is created by compiling and linking the two source files \codeword{main.cpp} and \codeword{foo.cpp}.
 
-When the two source files are compiled the compiler will search for the header file \codeword{foo.h} since both source files depend on this using a \codeword{#include "foo.hpp"}. Since the file is located in the same located as the source file, the compiler will not have any problems finding the file.
+When the two source files are compiled the compiler will search for the header file \codeword{foo.hpp} since both source files depend on this using \codeword{#include "foo.hpp"}. Since the file is located in the same directory as the source file, the compiler will not have any problems finding it.
 
 \sectiontitle{The CMake Scripting Language}
 
-The CMakeLists.txt describes the build process using a command based programming language. The commands are case insensitive and take a list of arguments.
+The CMakeLists.txt file describes the build process using a command based programming language. The commands are case insensitive and take a list of arguments.
 
 \begin{lstlisting}[language=bash]
 # This is a comment.
@@ -144,11 +144,11 @@ YET_ANOTHER_COMMAND( these
   over several lines )
 \end{lstlisting}
 
-CMake script also has variables. Variables can either be defined by CMake or can be defined in the CMake script.  The command \codeword{set(parameter value)} set a given parameter to a value. The command \codeword{message(value)} print out the value to the console. To get the value of a variable use \codeword{${varname}}, which substitutes the variable name with its value.
+CMake script also has variables. Variables can either be defined by CMake itself or can be defined in the CMake script.  The command \codeword{set(parameter value)} sets the given parameter to the given value. The command \codeword{message(value)} prints out the value to the console. To get the value of a variable use \codeword{${varname}}, which substitutes the variable name with its value.
 
 \lstinputlisting[language=bash]{examples/example2/CMakeLists.txt}
 
-All variable values are a text string. Text strings can be evaluated as boolean expressions (e.g. when used in \codeword{IF()} and \codeword{WHILE()}). The values "FALSE", "OFF", "NO", or any string ending in "-NOTFOUND" evaluates be false - everything else to true.
+All variable values are text strings. Text strings can be evaluated as boolean expressions (e.g. when used in \codeword{IF()} and \codeword{WHILE()}). The values "FALSE", "OFF", "NO", or any string ending in "-NOTFOUND" evaluate to false - everything else evaluates to true.
 
 Text strings can represent multiple values as a list by separating entities using a semicolon.
 
@@ -160,9 +160,9 @@ Lists can be iterated using the command \codeword{FOREACH (var val)}:
 			
 \sectiontitle{Exposing compile options}
 			
-CMake allows the end user (who runs CMake) to modify some values of some variables.  This is usually used to defined properties of the build such as locations of files, machine architecture, and string values.
+CMake allows the end user (who runs CMake) to modify some variables.  This is usually used to defined properties of the build such as locations of files, machine architecture, and string values.
 
-The command \codeword{set(<variable> <value> CACHE <type> <docstring>)} set the variable to the default value - but allows the value to be changed by the cmake user when configuring the build. The type should be one of the following:
+The command \codeword{set(<variable> <value> CACHE <type> <docstring>)} sets the variable to the given value - but it allows the value to be changed by the CMake user when configuring the build. The type should be one of the following:
 
 \begin{itemize}  
 \item FILEPATH = File chooser dialog.
@@ -172,7 +172,7 @@ The command \codeword{set(<variable> <value> CACHE <type> <docstring>)} set the 
 \item INTERNAL = No GUI entry (used for persistent variables).
 \end{itemize}
 
-In the following example, the user can configure if "Hello" or an alternative string should be printed based on the configuration variables hello and other\_msg.
+In the following example, the user can configure whether "Hello" or an alternative string should be printed based on the configuration variables \codeword{hello} and \codeword{other\_msg}.
  
 \lstinputlisting[language=bash]{examples/example5/CMakeLists.txt}
 
@@ -183,18 +183,18 @@ During configuration of the project, the CMake user gets prompted with the expos
 The values that the CMake user enters will be saved in the text file \codeword{CMakeCache.txt} as key-value pairs:
 
 \begin{lstlisting}[language=bash]
-// ....
+//...
 //Print hello
 hello:BOOL=OFF
 
 //Not hello value
 other_msg:STRING=Guten tag
-// ....
+//...
 \end{lstlisting}
 
 \sectiontitle{Complex projects}
 
-Some project both contains multiple executables and multiple libraries. For instance when having both unit tests and programs. It is common to separate these subprojects into subfolders. Example:
+Some projects contain multiple executables and/or multiple libraries. For instance multiple executables for unit tests and programs. It is common to separate these subprojects into subfolders. Example:
 
 \vspace{\baselineskip} % Whitespace before the next section
 \noindent\fbox{%
@@ -214,11 +214,11 @@ The main \codeword{CMakeLists.txt} contains the basic project settings but then 
 
 \lstinputlisting[language=bash]{examples/example6/CMakeLists.txt}
 
-First the library Foo is compiled from the source in the  \codeword{somelib} directory:
+First the library \codeword{Foo} is compiled from the source in the  \codeword{somelib} directory:
 
 \lstinputlisting[language=bash]{examples/example6/somelib/CMakeLists.txt}
 
-Finally, the executable Hello is compiled and linked to the Foo library - note that the target name is used here - not the actual path. Since the main.cpp references to header file Foo.hpp the somelib directory is added to the header search path:
+Finally, the executable \codeword{Hello} is compiled and linked to the \codeword{Foo} library - note that the target name is used here - not the actual path. Since \codeword{main.cpp} references the header file \codeword{foo.hpp}, the \codeword{somelib} directory is added to the header search path:
 
 \lstinputlisting[language=bash]{examples/example6/someexe/CMakeLists.txt}
 
@@ -245,21 +245,21 @@ In this project, the source files assume that the resource is located in the sam
 
 \lstinputlisting[language=c++]{examples/example7/someexe/main.cpp}
 
-The CMakeLists.txt make sure to copy the file. 
+The CMakeLists.txt file makes sure to copy the resource file. 
 
 \lstinputlisting[language=bash]{examples/example7/CMakeLists.txt}
 
-Note: One problem with this approach is if you modify the original resources, then you need to run CMake again.
+Note: one problem with this approach is that if you modify the original resources, then you need to run CMake again.
 
 \sectiontitle{External libraries}
 
-External libraries basically come in two flavors; dynamically linked libraries (DLLs) which are linked with the binary at runtime and statical linked libraries which are linked at compile time.
+External libraries basically come in two flavors; dynamically linked libraries (DLLs) which are linked with the binary at runtime and statically linked libraries which are linked at compile time.
 
-Static libraries have the most simple setup. To use one, the compiler needs to know the location of where to locate the header files and the linker need to know the location of the actual library. Unless the external libraries are distributed along with the project it is usually not possible to know their location - for this reason, it is common to use cached variables, where the CMake user can change the location. Static libraries have the file ending .lib on Windows and .a on most other platforms. 
+Static libraries have the simplest setup. To use one, the compiler needs to know the location of the header files and the linker needs to know the location of the actual library. Unless the external libraries are distributed along with the project it is usually not possible to know their location – for this reason, it is common to use cached variables, where the CMake user can change the location. Static libraries have the file extension \codeword{.lib} on Windows and \codeword{.a} on most other platforms. 
 
 \lstinputlisting[language=bash]{examples/example8/CMakeLists.txt}
 
-Dynamically linked libraries work similar to statical linked libraries. On Windows, it is still needed to link to a library at compile time, but the actual linking to the DLL happens at compile time. The executable file needs to be able to find the DLL file in the runtime linkers search path. If the DLL is not a system library, an easy solution is to copy the DLL next to the executable. Working with DLL often requires platform specific actions, which CMake support using the built-in variables \codeword{WIN32}, \codeword{APPLE}, \codeword{UNIX}.
+Dynamically linked libraries work similarly to statically linked libraries. On Windows, it is still needed to link to a library at compile time, but the actual linking to the DLL happens at runtime. The executable needs to be able to find the DLL file in the runtime linker's search path. If the DLL is not a system library, an easy solution is to copy the DLL in the same directory as the executable. Working with DLLs often requires platform specific actions, which CMake supports using the built-in variables \codeword{WIN32}, \codeword{APPLE}, and \codeword{UNIX}.
 
 \lstinputlisting[language=bash]{examples/example9/CMakeLists.txt}
 
@@ -281,7 +281,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 \sectiontitle{Defining preprocessor symbols}
 
-Use the \codeword{add_definitions()} to add preprocessor symbols to the project.
+Use \codeword{add_definitions()} to add preprocessor symbols to the project.
 
 \begin{lstlisting}[language=bash]
 # ...
@@ -298,9 +298,9 @@ using namespace std;
 
 int main(){
 #ifdef BAR
-    cout << "Bar"<< endl;
+    cout << "Bar" << endl;
 #endif
-    cout << "Hello world "<<FOO << endl;
+    cout << "Hello world " << FOO << endl;
 
     return 0;
 }
